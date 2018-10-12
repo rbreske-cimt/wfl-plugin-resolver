@@ -1,0 +1,59 @@
+image: artifacts.gvl.local/java/tools:latest
+
+variables:
+  MAVEN_CLI_OPTS: "-B -Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
+  SONAR_PREVIEW_CLI_OPTS: "-Dsonar.analysis.mode=preview -Dsonar.gitlab.commit_sha=${CI_COMMIT_SHA} -Dsonar.gitlab.ref_name=${CI_COMMIT_REF_NAME} -Dsonar.gitlab.project_id=${CI_PROJECT_ID} -Dsonar.gitlab.only_issue_from_commit_file=true -Dsonar.gitlab.ping_user=true"
+  MAVEN_SITE_DOCUMENT_PATH: "/var/www/doku/maven-site/${CI_PROJECT_NAME}-${CI_PROJECT_ID}/${CI_COMMIT_REF_NAME}"
+
+cache:
+  paths:
+    - .m2/repository
+
+stages:
+  - verify
+  - publish
+  - document
+ 
+verify:feature:
+ stage: verify
+ script:
+  - "git config --global user.email gitlab@gvl.de"
+  - "git config --global user.name gitlab"
+  - "git checkout origin/develop"
+  - "git merge $CI_BUILD_REF --no-commit --no-ff"
+  - "mvn $MAVEN_CLI_OPTS verify sonar:sonar $SONAR_PREVIEW_CLI_OPTS"
+ only:
+  - /feature.*/
+
+verify:develop:
+ stage: verify
+ script:
+  - "mvn $MAVEN_CLI_OPTS verify sonar:sonar -Dsonar.branch=${CI_COMMIT_REF_NAME}"
+ only:
+  - develop
+ artifacts:
+   paths:
+     - target/
+ 
+publish:nexus:
+ stage: publish
+ script:
+  - "mvn $MAVEN_CLI_OPTS deploy site"
+ dependencies:
+  - verify:develop
+ only:
+  - tags
+  - develop
+ artifacts:
+   paths:
+     - target/site/
+    
+document:
+  stage: document
+  script:
+    - "ssh -o StrictHostKeyChecking=no git_maven-site@doku01.gvl.local \"mkdir -p $MAVEN_SITE_DOCUMENT_PATH\""
+    - "scp -r -o StrictHostKeyChecking=no ./target/site git_maven-site@doku01.gvl.local:$MAVEN_SITE_DOCUMENT_PATH"
+  dependencies: 
+    - publish:nexus
+  only:
+    - tags

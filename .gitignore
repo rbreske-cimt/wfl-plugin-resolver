@@ -1,0 +1,11 @@
+.springbeans
+**/bin/
+**/target/
+**/.settings/
+**/.classpath
+**/.project
+**/.checkstyle
+**/.pmd
+**/camunda-h2-dbs
+build.properties
+build.xml

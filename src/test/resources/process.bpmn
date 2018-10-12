@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="1.14.0">
+  <bpmn:process id="wfl-plugin-resolver" name="wfl-plugin-resolver" isExecutable="true">
+    <bpmn:startEvent id="StartEventProcessStarted" name="Process&#10;started">
+      <bpmn:outgoing>SequenceFlow_13hnjfr</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_13hnjfr" sourceRef="StartEventProcessStarted" targetRef="Task_1rosk07" />
+    <bpmn:endEvent id="EndEvent_07h3ec3" name="Process ended">
+      <bpmn:incoming>SequenceFlow_1p121n5</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_1p121n5" sourceRef="Task_1rosk07" targetRef="EndEvent_07h3ec3" />
+    <bpmn:subProcess id="Task_1rosk07" name="Acessing Spring bean">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="Input_1khrloo">
+            <camunda:script scriptFormat="juel">${testBean.test()}</camunda:script>
+          </camunda:inputParameter>
+          <camunda:outputParameter name="Output_3dr62a2">
+            <camunda:script scriptFormat="juel">${testBean.test()}</camunda:script>
+          </camunda:outputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_13hnjfr</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1p121n5</bpmn:outgoing>
+      <bpmn:serviceTask id="Task_1uwupau" name="TestActivity" camunda:expression="${true}">
+        <bpmn:incoming>SequenceFlow_16xucn3</bpmn:incoming>
+      </bpmn:serviceTask>
+      <bpmn:startEvent id="StartEvent_14wzmef">
+        <bpmn:outgoing>SequenceFlow_16xucn3</bpmn:outgoing>
+      </bpmn:startEvent>
+      <bpmn:sequenceFlow id="SequenceFlow_16xucn3" sourceRef="StartEvent_14wzmef" targetRef="Task_1uwupau" />
+    </bpmn:subProcess>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="wfl-plugin-resolver">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEventProcessStarted">
+        <dc:Bounds x="173" y="102" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_13hnjfr_di" bpmnElement="SequenceFlow_13hnjfr">
+        <di:waypoint x="209" y="120" />
+        <di:waypoint x="266" y="120" />
+        <di:waypoint x="266" y="373" />
+        <di:waypoint x="322" y="373" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="281" y="240.5" width="0" height="12" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="EndEvent_07h3ec3_di" bpmnElement="EndEvent_07h3ec3">
+        <dc:Bounds x="921" y="366" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="901" y="344" width="76" height="12" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1p121n5_di" bpmnElement="SequenceFlow_1p121n5">
+        <di:waypoint x="497" y="273" />
+        <di:waypoint x="497" y="206" />
+        <di:waypoint x="939" y="206" />
+        <di:waypoint x="939" y="366" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="718" y="185" width="0" height="12" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="SubProcess_1gq27nc_di" bpmnElement="Task_1rosk07" isExpanded="true">
+        <dc:Bounds x="322" y="273" width="350" height="200" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ServiceTask_01ghssh_di" bpmnElement="Task_1uwupau">
+        <dc:Bounds x="401" y="323" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="StartEvent_14wzmef_di" bpmnElement="StartEvent_14wzmef">
+        <dc:Bounds x="348" y="345" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="366" y="385" width="0" height="12" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_16xucn3_di" bpmnElement="SequenceFlow_16xucn3">
+        <di:waypoint x="384" y="363" />
+        <di:waypoint x="401" y="363" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="392.5" y="342" width="0" height="12" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
